@@ -39,7 +39,6 @@ def garch(omega, alpha, beta, y_t):
 
 #Build the negative log-likelihood function.
 def NLL(param, y_t):
-    T = len(y_t)
     omega = param[0]
     alpha = param[1]
     beta = param[2]
