@@ -14,7 +14,7 @@ dataframe = pd.read_csv('^SPX.csv', parse_dates = True)
 dataframe['Date'] = dataframe['Date'].astype('datetime64[ns]')
 
 #Adjust the daily returns to log returns.
-dataframe['SPX_log_returns'] = np.log(((dataframe['Adj Close'])/np.roll(dataframe['Adj Close'], 1)))
+dataframe['SPX_log_returns'] = np.log(((dataframe['Adj Close']) / np.roll(dataframe['Adj Close'], 1)))
 dataframe['SPX_log_returns'][0] = math.nan
 dataframe = dataframe.dropna()
 
