@@ -44,7 +44,7 @@ def NLL(param, y_t):
     alpha = param[1]
     beta = param[2]
     sigma_2 = garch(omega, alpha, beta, y_t)
-    nll = np.sum(np.log(sigma_2) + (y_t**2)/sigma_2)
+    nll = np.sum(np.log(sigma_2) + (y_t**2) / sigma_2)
     return nll
 
 #Starting parameters to let the model begin, maybe a formula to derive these when more time
