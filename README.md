@@ -24,20 +24,20 @@ dataframe['Daily_Volatility'] = np.sqrt(dataframe['Daily_Variance'])
 
 y_t = dataframe['SPX_log_returns'].values
 
-#Build the GARCH(1,1)-model
+#Build the GARCH(1,1)-model.
 def garch(omega, alpha, beta, y_t):
     T = len(y_t)
-    #start with an array of zeros for the sigma^2 to fill in with results of the function
+    '''start with an array of zeros for the sigma^2 to fill in with results of the function'''
     sigma_2 = np.zeros(T)   
     for i in range(T):
         if i == 0:
-            #from the theory this formula for the first sigma^2
+            '''from the theory this formula for the first sigma^2'''
             sigma_2[i] = omega / (1 - alpha - beta)     
         else:
             sigma_2[i] = omega + alpha*y_t[i - 1]**2 + beta*sigma_2[i -1]
     return sigma_2
 
-#Build the negative log-likelihood function
+#Build the negative log-likelihood function.
 def NLL(param, y_t):
     T = len(y_t)
     omega = param[0]
@@ -47,18 +47,20 @@ def NLL(param, y_t):
     nll = np.sum(np.log(sigma_2) + (y_t**2) / sigma_2)
     return nll
 
-#Starting parameters to let the model begin, maybe a formula to derive these when more time
+#Starting parameters to let the model begin.
 start_parameters = (0.00001, 0.01, 0.9)
 
-#minimize the negative log-likelihood is maximizing the likelihood
+#Minimize the negative log-likelihood is maximizing the likelihood.
 result = minimize(NLL, start_parameters, args=y_t, method='nelder-mead', options={'disp': True})
-#obtain the parameters
+
+#Obtain the parameters.
 omega = result.x[0]
 alpha = result.x[1]
 beta = result.x[2]
-#implement the parameters in a new column in the dataframe
+
+#Implement the parameters in a new column in the dataframe
 #take the squareroot because the garch derives the variance 
-#which is the square of the volatility as mentioned in the theory
+#which is the square of the volatility as mentioned in the theory.
 dataframe['GARCH'] = np.sqrt(garch(omega, alpha, beta, y_t)) 
 fig = plt.figure()
 plt.plot(dataframe['Date'], dataframe['GARCH'], label = 'GARCH', zorder = 2)
